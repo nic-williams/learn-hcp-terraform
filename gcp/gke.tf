@@ -12,7 +12,7 @@ variable "gke_password" {
 }
 
 variable "gke_num_nodes" {
-  default     = 2
+  default     = 1
   description = "number of gke nodes"
 }
 
@@ -57,6 +57,8 @@ resource "google_container_node_pool" "primary_nodes" {
 
     # preemptible  = true
     machine_type = "n1-standard-1"
+    disk_size_gb = 50  # Reduce disk size to fit quota
+    disk_type    = "pd-standard"  # Use standard persistent disk instead of SSD
     tags         = ["gke-node", "${var.project_id}-gke"]
     metadata = {
       disable-legacy-endpoints = "true"
