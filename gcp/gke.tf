@@ -45,6 +45,10 @@ resource "google_container_node_pool" "primary_nodes" {
   version = data.google_container_engine_versions.gke_version.valid_node_versions[0]
   node_count = var.gke_num_nodes
 
+management {
+    auto_upgrade = false
+    auto_repair  = true
+  }
 
   node_config {
     oauth_scopes = [
