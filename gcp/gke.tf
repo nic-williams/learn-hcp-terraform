@@ -26,6 +26,7 @@ resource "google_container_cluster" "primary" {
   name     = "${var.project_id}-gke"
   location = "${var.region}-a"  # Use zone instead of region to reduce resource requirements
 
+  release_channel { channel = "STABLE" }
   # We can't create a cluster with no node pool defined, but we want to only use
   # separately managed node pools. So we create the smallest possible default
   # node pool and immediately delete it.
@@ -42,13 +43,19 @@ resource "google_container_node_pool" "primary_nodes" {
   location   = "${var.region}-a"  # Match the cluster zone
   cluster    = google_container_cluster.primary.name
   #version = data.google_container_engine_versions.gke_version.release_channel_default_version["STABLE"]
-  version = data.google_container_engine_versions.gke_version.valid_node_versions[0]
+  #version = data.google_container_engine_versions.gke_version.valid_node_versions[0]
   node_count = var.gke_num_nodes
 
 management {
     auto_upgrade = false
     auto_repair  = true
   }
+
+  upgrade_settings {
+  strategy        = "SURGE"
+  max_surge       = 1
+  max_unavailable = 0
+}
 
   node_config {
     oauth_scopes = [
