@@ -26,7 +26,6 @@ resource "google_container_cluster" "primary" {
   name     = "${var.project_id}-gke"
   location = "${var.region}-a"  # Use zone instead of region to reduce resource requirements
 
-  release_channel { channel = "STABLE" }
   # We can't create a cluster with no node pool defined, but we want to only use
   # separately managed node pools. So we create the smallest possible default
   # node pool and immediately delete it.
