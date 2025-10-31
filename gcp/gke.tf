@@ -41,9 +41,13 @@ resource "google_container_node_pool" "primary_nodes" {
   name       =  "${var.project_id}-gke-node-pool" # google_container_cluster.primary.name
   location   = "${var.region}-a"  # Match the cluster zone
   cluster    = google_container_cluster.primary.name
-  
-  # version = data.google_container_engine_versions.gke_version.release_channel_default_version["STABLE"]
+
   node_count = var.gke_num_nodes
+
+  management {
+    auto_repair  = true
+    auto_upgrade = true
+  }
 
   node_config {
     oauth_scopes = [
