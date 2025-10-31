@@ -41,7 +41,8 @@ resource "google_container_node_pool" "primary_nodes" {
   name       =  "${var.project_id}-gke-node-pool" # google_container_cluster.primary.name
   location   = "${var.region}-a"  # Match the cluster zone
   cluster    = google_container_cluster.primary.name
-  version = data.google_container_engine_versions.gke_version.release_channel_default_version["0"]
+  #version = data.google_container_engine_versions.gke_version.release_channel_default_version["STABLE"]
+  version = data.google_container_engine_versions.gke_version.valid_node_versions[0]
   node_count = var.gke_num_nodes
 
 
